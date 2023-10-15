@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+  <div id="root"></div>
+</body>
+<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+  function Btn({btnText, radius=20, click}){ // 2.Click 이벤트 받음
+    console.log('btnText',btnText)
+    return <button 
+    type="button" 
+    onClick={click} //3.Click 이벤트 연결 
+    style={{
+      padding:20+'px', 
+      margin:10+'px',
+      backgroundColor:'pink',
+      border:0,
+      borderRadius:radius+'px'
+    }}>
+    {btnText}
+    </button>
+  }
+  const MemorizeBtn = React.memo(Btn);
+
+  Btn.propTypes = { //propType 오브젝트
+    btnText: PropTypes.string.isRequired, // 문자, isRequired 필수사항
+    radius: PropTypes.number, // 숫자
+    click: PropTypes.func // 함수
+  }
+
+  function App(){
+    const [text , setText] = React.useState("First Rendering1")
+    const changeBtnText = () => { //4. 클릭시 부모 이벤트 실행
+      setText('Second Rendering')
+    }
+    return ( //5. 전체 리렌더링
+      <div className="contain">
+        <h1>Props 예제</h1>
+        <MemorizeBtn btnText={text} radius={10} click={changeBtnText} />
+        <p>1.Click 이벤트 Btn 전달</p><br/><br/>
+        <MemorizeBtn btnText='First Rendering2'/>  
+        <p>①. 1.번의 click이벤트 실행시 전체 랜더링될때 고정값인데 계속 랜더링됨</p>
+        <p>②. const MemorizeBtn = React.memo(Btn) 랜더링 되지 않아도 되는 것을 비교하여 랜더링 안함</p>
+      </div>
+    )
+  }
+  const root = document.getElementById('root')
+  ReactDOM.render(<App/>,root);
+</script>
+<style>
+  .contain{width: 600px; margin: 100px auto; border: 2px solid #ddd; padding: 20px 40px 40px; border-radius: 10px;}
+</style>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+  <div id="root"></div>
+</body>
+<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+  function MinutesToHours(){
+    const [calc , setCalc] = React.useState('');
+    const [disabled , setDisabled] = React.useState(false)
+    const change = (event) =>{
+      setCalc(event.target.value)
+    }
+    const changeDisabled = () => {
+      setDisabled(value => !value)
+      onReset()
+    }
+    const onReset = () =>{
+      setCalc('')
+    }
+    return (
+      <div>
+        <h2>
+          MinutesToHours
+        </h2>
+        <label htmlFor='minutes' style={{paddingRight:10+'px'}}>Minutes</label>
+        <input 
+        value={disabled ? calc*60 : calc}
+        type='text' 
+        id='minutes' 
+        placeholder='"분"을 입력하세요.'
+        onChange={change}
+        disabled={disabled}
+        /><br/><br/>
+
+        <label htmlFor='hours' style={{paddingRight:10+'px'}}>Hours</label>
+        <input 
+        value={disabled ? calc : calc/60}
+        type='text' 
+        id='hours' 
+        placeholder='"시간"을 입력하세요.'
+        onChange={change}
+        disabled={!disabled}
+        /><br/><br/>
+
+        <button type='button' onClick={onReset}>리셋</button>
+        <button type='button' onClick={changeDisabled}>{disabled === true ? '분으로 계산' : '시간으로 계산'}</button>
+      </div>
+      )
+  }
+  function KmToMile(){
+    const [calc2 , setCalc2] = React.useState('');
+    const [disabled2, setDisabled2] = React.useState(false);
+    const change2 = () => {
+      setCalc2(event.target.value)
+    }
+    const changeDisabled2 = () =>{
+      setDisabled2(value => !value)
+      reSet2();
+    }
+    const reSet2 = () =>{
+      setCalc2('')
+    }
+    return(
+      <div>
+        <h2>
+          KmToMile
+        </h2>
+        <label style={{paddingRight:10+'px'}}>Mile</label>
+        <input 
+        value={disabled2 ? (calc2 / 1.609344).toFixed(3) : calc2}
+        type='text' 
+        placeholder='"Mile"을 입력하세요.'
+        onChange={change2}
+        disabled={disabled2} 
+        /><br/><br/>
+        <label style={{paddingRight:10+'px'}}>Km</label>
+        <input 
+        value={disabled2 ? calc2 :  (calc2 * 1.609344).toFixed(3) }
+        type='text' 
+        placeholder='"Km"을 입력하세요.'
+        onChange={change2}
+        disabled={!disabled2}
+        /><br/><br/>
+        <button type="button" onClick={reSet2}>리셋</button>
+        <button type="button" onClick={changeDisabled2}>{disabled2 ? 'Mile 계산' : 'Km 계산'}</button>
+      </div>
+    )
+  }
+  function App(){
+    const [select , setSeclect] = React.useState('empty')
+    const changeSelect = () => {
+      setSeclect(event.target.value)
+    }
+    return (
+      <div className="contain">
+        <h1>변환기</h1>
+        <select onChange={changeSelect}>
+          <option value="empty" hidden>선택</option>
+          <option value="all">All</option>
+          <option value="0">MinutesToHours</option>
+          <option value="1">KmToMile</option>
+        </select>
+        <br/><br/><hr/><br/>
+        {select === "empty" ? <div>변환하고 싶은 방법을 선택해 주세요.</div> : null}
+        {select === "all" ? <><MinutesToHours/><br/><br/><hr/><br/><KmToMile/></>  : null}
+        {select === "0" ? <MinutesToHours/> : null}
+        {select === "1" ? <KmToMile/> : null}
+      </div>
+    )
+  }
+  const root = document.getElementById('root')
+  ReactDOM.render(<App/>,root);
+</script>
+<style>
+  .contain{width: 600px; margin: 100px auto; border: 2px solid #ddd; padding: 20px 40px 40px; border-radius: 10px;}
+</style>
+</html>
